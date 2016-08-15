@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 from pip._vendor import requests
 from pip.utils import call_subprocess
-from pip.utils.setuptools_build import SETUPTOOLS_SHIM
+#from pip.utils.setuptools_build import SETUPTOOLS_SHIM
 from pip.vcs import vcs
 
 
@@ -132,13 +132,17 @@ def get_links_from_pypi(pkg_homepage_url, default_encoding):
 
 
 def install_pkg(pkg_dir):
-    setup_py_path = 'setup.py'
-    call_subprocess(
-        [sys.executable, '-c', SETUPTOOLS_SHIM % setup_py_path] +
-        ['develop', '--no-deps'],
-        cwd=pkg_dir,
-        show_stdout=False,
-    )
+    import subprocess
+    cmd = "pip install -e {}".format(pkg_dir).split()
+    #import ipdb; ipdb.set_trace()
+    subprocess.check_call(cmd)
+    #setup_py_path = 'setup.py'
+    #call_subprocess(
+    #    [sys.executable, '-c', SETUPTOOLS_SHIM % setup_py_path] +
+    #    ['develop', '--no-deps'],
+    #    cwd=pkg_dir,
+    #    show_stdout=False,
+    #)
 
 
 
@@ -174,5 +178,7 @@ def source_install(pkges_list, dir_path, config):
                     founds[pkg_name] = url
                     break
                 else:
-                    shutil.rmtree(pkg_dir)
+                    #TODO:: this is bad
+                    pass
+                    #shutil.rmtree(pkg_dir)
     return founds

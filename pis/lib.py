@@ -6,22 +6,22 @@ import os
 import pip
 import re
 import shutil
+import subprocess
 import sys
 from urllib.parse import urlparse
 
 from pip._vendor import requests
 from pip.utils import call_subprocess
-from pip.utils.setuptools_build import SETUPTOOLS_SHIM
 from pip.vcs import vcs
 
 
 
 logger = logging.getLogger(__name__)
 
-#TODO: add travis file
-#TODO: release with readme, with examples of use, and rm todos from setup.py etc.
+#TODO: when guess fails (shutil.rmtree(pkg_dir))
+#TODO: cli arg dst_path is repo itself this is not what i meant, fix it
 #TODO: user info
-#TODO:: cli arg dst_path is repo itself this is not what i meant, fix it
+#TODO: release with readme, with examples of use, and rm todos from setup.py etc.
 #TODO: respect versions by tags or branches
 #TODO: docstrings
 #TODO: resolve all TODOs (including those from test file)
@@ -132,14 +132,8 @@ def get_links_from_pypi(pkg_homepage_url, default_encoding):
 
 
 def install_pkg(pkg_dir):
-    setup_py_path = 'setup.py'
-    call_subprocess(
-        [sys.executable, '-c', SETUPTOOLS_SHIM % setup_py_path] +
-        ['develop', '--no-deps'],
-        cwd=pkg_dir,
-        show_stdout=False,
-    )
-
+    cmd = "pip install -e {}".format(pkg_dir).split()
+    subprocess.check_call(cmd)
 
 
 #
@@ -174,5 +168,7 @@ def source_install(pkges_list, dir_path, config):
                     founds[pkg_name] = url
                     break
                 else:
-                    shutil.rmtree(pkg_dir)
+                    #TODO:: this is bad
+                    pass
+                    #shutil.rmtree(pkg_dir)
     return founds

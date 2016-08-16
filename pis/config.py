@@ -3,6 +3,12 @@ import json
 import os
 import sys
 
+try:
+    from json.decoder import JSONDecodeError
+except ImportError:
+    # python < 3.5
+    JSONDecodeError = ValueError
+
 
 log = logging.getLogger(__file__)
 
@@ -26,7 +32,7 @@ def init_user_config(config_dir, config_name, config_default):
         except FileExistsError:
             pass
         write_config(config_user_path, config_default)
-    except json.decoder.JSONDecodeError:
+    except JSONDecodeError:
         log.error(
             "Config file ({}) includes invalid JSON".format(config_user_path)
         )

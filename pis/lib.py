@@ -18,7 +18,6 @@ from pip.vcs import vcs
 
 logger = logging.getLogger(__name__)
 
-#TODO: when guess fails (shutil.rmtree(pkg_dir))
 #TODO: cli arg dst_path is repo itself this is not what i meant, fix it
 #TODO: user info
 #TODO: release with readme, with examples of use, and rm todos from setup.py etc.
@@ -161,14 +160,11 @@ def source_install(pkges_list, dir_path, config):
             urls = get_links_from_pypi(pkg_homepage, 'utf-8')
             urls = filter_urls(urls, config['repo_hosts2vcses'].keys())
         for url in urls:
-            if clone_repo(url, pkg_name, config):
-                pkg_dir = max(glob.glob('*'), key=os.path.getctime)
-                if verify_pkg_dir(pkg_dir, pkg_name):
-                    install_pkg(pkg_dir)
+            if clone_repo(repo_url=url, dst_path=pkg_name, config=config):
+                if verify_pkg_dir(pkg_dir=pkg_name, pkg_name=pkg_name):
+                    install_pkg(pkg_dir=pkg_name)
                     founds[pkg_name] = url
                     break
                 else:
-                    #TODO:: this is bad
-                    pass
-                    #shutil.rmtree(pkg_dir)
+                    shutil.rmtree(pkg_dir)
     return founds

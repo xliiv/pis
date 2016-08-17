@@ -16,8 +16,10 @@ setuptools.setup(
         ' (git, hg, etc.) repository.'
     ),
     long_description=open('README.md').read(),
+    license='MIT',
 
     packages=setuptools.find_packages(),
+    include_package_data=True,
     install_requires=[],
 
     entry_points={

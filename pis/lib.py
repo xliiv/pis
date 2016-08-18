@@ -131,8 +131,9 @@ def get_links_from_pypi(pkg_homepage_url, default_encoding):
 
 
 def install_pkg(pkg_dir):
-    cmd = "pip install -e {}".format(pkg_dir).split()
-    subprocess.check_call(cmd)
+    subprocess.check_call([
+        "pip{}".format(sys.version[:1]), "install", "-e", pkg_dir,
+    ])
 
 
 #

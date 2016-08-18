@@ -18,9 +18,9 @@ from pip.vcs import vcs
 
 logger = logging.getLogger(__name__)
 
-#TODO: cli arg dst_path is repo itself this is not what i meant, fix it
 #TODO: user info
 #TODO: release with readme, with examples of use, and rm todos from setup.py etc.
+#TODO: cli arg dst_path is repo itself this is not what i meant, fix it
 #TODO: respect versions by tags or branches
 #TODO: docstrings
 #TODO: resolve all TODOs (including those from test file)

@@ -167,5 +167,5 @@ def source_install(pkges_list, dir_path, config):
                     founds[pkg_name] = url
                     break
                 else:
-                    shutil.rmtree(pkg_dir)
+                    shutil.rmtree(pkg_name)
     return founds

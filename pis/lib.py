@@ -131,8 +131,9 @@ def get_links_from_pypi(pkg_homepage_url, default_encoding):
 
 
 def install_pkg(pkg_dir):
-    cmd = "pip install -e {}".format(pkg_dir).split()
-    subprocess.check_call(cmd)
+    subprocess.check_call([
+        "pip{}".format(sys.version[:1]), "install", "-e", pkg_dir,
+    ])
 
 
 #
@@ -166,5 +167,5 @@ def source_install(pkges_list, dir_path, config):
                     founds[pkg_name] = url
                     break
                 else:
-                    shutil.rmtree(pkg_dir)
+                    shutil.rmtree(pkg_name)
     return founds

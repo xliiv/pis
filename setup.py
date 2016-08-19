@@ -1,6 +1,12 @@
 import setuptools
+import sys
 
 from pis import __version__
+
+
+if int(sys.version[0]) < 3:
+    print("Only Python 3.x supported")
+    sys.exit(1)
 
 
 setuptools.setup(

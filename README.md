@@ -1,5 +1,7 @@
 ![alt text](https://travis-ci.org/xliiv/pis.svg?branch=travis)
 
+[![Coverage Status](https://coveralls.io/repos/github/xliiv/pis/badge.svg)](https://coveralls.io/github/xliiv/pis)
+
 
 # pis (Pis Installs Sources)
 

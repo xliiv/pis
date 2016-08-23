@@ -28,16 +28,16 @@ config_user_path = os.path.join(config_user_dir, config_filename)
 latest_config_url = 'https://raw.githubusercontent.com/xliiv/pis/master/pis/config.json'
 
 
-def merge_dicts(dikt, dikt2):
+def update_dikt(dikt_to_update, dikt2):
     for k, v in dikt2.items():
         if (
-            k in dikt and
-            isinstance(dikt[k], dict) and
+            k in dikt_to_update and
+            isinstance(dikt_to_update[k], dict) and
             isinstance(dikt2[k], collections.Mapping)
         ):
-            merge_dicts(dikt[k], dikt2[k])
+            update_dikt(dikt_to_update[k], dikt2[k])
         else:
-            dikt[k] = dikt2[k]
+            dikt_to_update[k] = dikt2[k]
 
 
 def init_user_config(config_dir, config_name, config_default):
@@ -78,8 +78,8 @@ def download_latest_config(latest_config_url):
 def with_latest_config(latest_config_url, config_path):
     user_config = read_config(config_path)
     latest_config = download_latest_config(latest_config_url)
-    merge_dicts(user_config, latest_config)
-    return user_config
+    update_dikt(latest_config, user_config)
+    return latest_config
 
 
 init_user_config(

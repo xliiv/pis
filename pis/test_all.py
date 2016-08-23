@@ -4,14 +4,22 @@ import tempfile
 import unittest
 from unittest import mock
 
-from pis.config import config_default_path, read_config
-from pis.config import init_user_config
-from pis.lib import _get_links_from_pypi
-from pis.lib import cd
-from pis.lib import clone_repo
-from pis.lib import source2pkg_name
-from pis.lib import verify_pkg_dir
-from pis.lib import url2vcses
+from pis.config import (
+    config_default_path,
+    latest_config_url,
+    init_user_config,
+    read_config,
+    with_latest_config,
+    write_config,
+)
+from pis.lib import (
+    _get_links_from_pypi,
+    cd,
+    clone_repo,
+    source2pkg_name,
+    url2vcses,
+    verify_pkg_dir,
+)
 
 
 #TODO:: mv to seperate file
@@ -199,6 +207,70 @@ class TestConfigInit(unittest.TestCase):
                 os.path.basename(user_config.name),
                 {}
             )
+
+
+class TestWithLatestConfig(unittest.TestCase):
+    def setUp(self):
+        self.user_config = tempfile.NamedTemporaryFile()
+        write_config(
+            self.user_config.name,
+            {
+                'user': 'user',
+                'both': 'user',
+                'nested': {
+                    'user': 'user',
+                    'both': 'user',
+                }
+            }
+        )
+        self.latest_config = {
+            'latest': 'latest',
+            'both': 'latest',
+            'nested': {
+                'latest': 'latest',
+                'both': 'latest',
+            }
+        }
+
+    @mock.patch('pis.config.download_latest_config')
+    def test_latest_value_is_used_when_users_missing(self, latest_config):
+        latest_config.return_value = self.latest_config
+        config = with_latest_config(latest_config_url, self.user_config.name)
+        self.assertEqual(config['latest'], 'latest')
+
+    @mock.patch('pis.config.download_latest_config')
+    def test_user_value_is_used_when_latest_missing(self, latest_config):
+        latest_config.return_value = self.latest_config
+        config = with_latest_config(latest_config_url, self.user_config.name)
+        self.assertEqual(config['user'], 'user')
+
+    @mock.patch('pis.config.download_latest_config')
+    def test_user_value_is_used_when_both_exists(self, latest_config):
+        latest_config.return_value = self.latest_config
+        config = with_latest_config(latest_config_url, self.user_config.name)
+        self.assertEqual(config['both'], 'user')
+
+    @mock.patch('pis.config.download_latest_config')
+    def test_nested_latest_value_is_used_when_users_missing(
+        self, latest_config
+    ):
+        latest_config.return_value = self.latest_config
+        config = with_latest_config(latest_config_url, self.user_config.name)
+        self.assertEqual(config['nested']['latest'], 'latest')
+
+    @mock.patch('pis.config.download_latest_config')
+    def test_nested_user_value_is_used_when_latest_missing(
+        self, latest_config
+    ):
+        latest_config.return_value = self.latest_config
+        config = with_latest_config(latest_config_url, self.user_config.name)
+        self.assertEqual(config['nested']['user'], 'user')
+
+    @mock.patch('pis.config.download_latest_config')
+    def test_nested_user_value_is_used_when_both_exists(self, latest_config):
+        latest_config.return_value = self.latest_config
+        config = with_latest_config(latest_config_url, self.user_config.name)
+        self.assertEqual(config['nested']['both'], 'user')
 
 
 @unittest.skip("TODO")

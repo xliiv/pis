@@ -151,6 +151,9 @@ class TestConfigInit(unittest.TestCase):
             'var': 'val'
         }
 
+    def test_default_config_is_valid_json(self):
+        read_config(config_default_path)
+
     def test_user_dir_is_created(self):
         init_user_config(
             self.absent_dir_name, self.config_name, self.config_default

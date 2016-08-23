@@ -5,6 +5,7 @@
         "bitbucket.org": ["git", "hg"]
     },
     "pkg_name2repo_url": {
+        "djangorestframework": "https://github.com/tomchristie/django-rest-framework",
         "pis": "https://github.com/xliiv/pis"
     }
 }

@@ -26,3 +26,7 @@ TODO Rest of content
 ## TODO:
 
 * install package from tag, like `pis requests==2.7.0`
+
+## Credits
+
+* thanks to [ar4s](https://github.com/ar4s "ar4s") for great idea of getting config directly from master branch

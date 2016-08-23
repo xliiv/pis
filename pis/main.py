@@ -6,7 +6,8 @@ import os
 
 from pis.config import (
     config_user_path,
-    read_config,
+    latest_config_url,
+    with_latest_config,
     write_config,
 )
 from pis import __version__
@@ -36,7 +37,7 @@ def main():
     )
     args = parser.parse_args()
     if args.pkg_names:
-        config = read_config(config_user_path)
+        config = with_latest_config(latest_config_url, config_user_path)
         #founds = lib.source_install(args.pkg_names, args.destiny_dir, config)
         founds = lib.source_install(args.pkg_names, os.getcwd(), config)
         if founds:

@@ -1,7 +1,11 @@
-import logging
+import collections
 import json
+import logging
 import os
 import sys
+
+from pip._vendor import requests
+
 
 try:
     from json.decoder import JSONDecodeError
@@ -20,6 +24,20 @@ config_default_path = os.path.join(
 )
 config_user_dir = os.path.join(os.path.expanduser('~'), '.' + __package__)
 config_user_path = os.path.join(config_user_dir, config_filename)
+
+latest_config_url = 'https://raw.githubusercontent.com/xliiv/pis/master/pis/config.json'
+
+
+def merge_dicts(dikt, dikt2):
+    for k, v in dikt2.items():
+        if (
+            k in dikt and
+            isinstance(dikt[k], dict) and
+            isinstance(dikt2[k], collections.Mapping)
+        ):
+            merge_dicts(dikt[k], dikt2[k])
+        else:
+            dikt[k] = dikt2[k]
 
 
 def init_user_config(config_dir, config_name, config_default):
@@ -48,6 +66,20 @@ def read_config(path):
 def write_config(path, config_dict, encoding=config_encoding):
     with open(path, 'wb') as config_file:
         config_file.write(json.dumps(config_dict).encode(encoding))
+
+
+def download_latest_config(latest_config_url):
+    response = requests.get(latest_config_url)
+    #TODO: error handling
+    assert response.status_code == 200, "Couldn't get latest json"
+    return json.loads(response.content.decode())
+
+
+def with_latest_config(latest_config_url, config_path):
+    user_config = read_config(config_path)
+    latest_config = download_latest_config(latest_config_url)
+    merge_dicts(user_config, latest_config)
+    return user_config
 
 
 init_user_config(

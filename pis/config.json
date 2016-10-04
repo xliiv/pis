@@ -7,6 +7,7 @@
     "pkg_name2repo_url": {
         "django": "https://github.com/django/django",
         "djangorestframework": "https://github.com/tomchristie/django-rest-framework",
-        "pis": "https://github.com/xliiv/pis"
+        "pis": "https://github.com/xliiv/pis",
+        "tipboard": "https://github.com/allegro/tipboard"
     }
 }
